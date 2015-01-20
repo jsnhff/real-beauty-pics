@@ -62,13 +62,15 @@
 
             // Key element measurements
             var bodyHeight = $("body").height();
-            var smallPaperHeight = smallPaper.height();
             var smallPaperBoundaryWidth = smallPaperBoundary.width();
             var bigPaperWidth = bigPaper.width();
             
             // Set paper measurements
             smallPaperBoundary.height(smallPaperBoundaryWidth*1.29);
             bigPaper.height(bigPaperWidth*1.29);
+
+            // Set height here because it changes based on width
+            var smallPaperHeight = smallPaper.height();
 
             // Set key element initial positions
             smallPaper.css("top", (0-smallPaperHeight));
@@ -85,13 +87,16 @@
                 smallPaperBoundary.height(smallPaperBoundaryWidth*1.29);
                 bigPaper.height(bigPaperWidth*1.29);
                 
+                // Set height here because it changes based on width
+                var smallPaperHeight = smallPaper.height();
+
                 // Set key element initial positions
                 smallPaper.css("top", (0-smallPaperHeight));
                 bigPaper.css("top", (0+bodyHeight));
             });
 
             // Animation one
-            smallPaper.animate({
+            smallPaper.delay(2000).animate({
                 top: "0" 
             }, 1000, function() {
                 
