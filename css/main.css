@@ -1,0 +1,98 @@
+html, body {
+    height: 100%;
+    background: #666;
+}
+
+.wall-text {
+    color: #eee;
+    font-size: 5rem;
+    text-shadow: 0px 1px 1px #666;
+    margin-bottom: 10rem;
+}
+
+.printer {
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+}
+
+.printer-dot {
+    top: 15px;
+    left: 15px;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
+.printer-dot--blink {
+    animation: blink 1s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+}
+@keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+@-webkit-keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+
+.printer-slot {
+    padding: 3px;
+}
+
+.small-paper-boundary {
+    top: 3px;
+    left: 5px;
+    right: 5px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.small-paper-table {
+    height: 100%;
+}
+
+.small-paper {
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.small-paper img {
+    opacity: 0.15;
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+
+.big-paper-boundary {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.big-paper-table {
+    height: 100%;
+}
+
+.big-paper {
+    top: 0;
+    height: 35rem;
+    box-shadow: 0px 1px 5px #ddd;
+}
+
+@media screen and (max-width: 640px) {
+    .wall-text {
+        font-size: 4rem;
+    }
+
+    .printer {
+        width: 30%;
+    }
+}

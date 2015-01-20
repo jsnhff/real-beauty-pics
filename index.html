@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Real Beauty Pics</title>
+        <meta name="description" content="Real Beauty Pics.">
+        <meta name="apple-mobile-web-app-title" content="Work Life Tips">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- SVG favicon ya'll -->
+        <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAACAEAAAAAAAl9GgAEQGYAA1SHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERAAAAAAABEREQREREQBERERE0REQxERERERNEQxERERERETRDERERERERNEMREREiERE0QxESESIhETQAESIhIiIRAAASIiEiIiIAMiIiIRIiIiIiIiIRESIiIiIiIRERESIiIiIiERESIiIiIiEREREiIREiERERERERERERHgAwAA8AcAAPgPAAD8HwAA/h8AAP4fAACeHQAAjhgAAIYQAACAAAAAwAEAAOADAAD4AQAA8AMAAPjnAAD//wAA" rel="icon" type="image/x-icon">
+       
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/basscss.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <div class="bg-white">
+            <div class="clearfix">
+                <div class="sm-col-8 mx-auto">
+                    <h1 class="wall-text center">BEAUTY</h1>
+                </div>
+            </div>
+            <div class="clearfix">
+                <div class="sm-col-4 md-col-3 lg-col-2 bg-light-gray p4 mx-auto relative printer">
+                    <div class="bg-green absolute printer-dot printer-dot--blink"></div>
+                    <div class="sm-col-7 md-col-8 bg-mid-gray mx-auto relative printer-slot">
+                        <div class="absolute small-paper-boundary">
+                            <div class="small-paper bg-white relative">
+                                <div class="table small-paper-table">
+                                    <div class="table-cell center">
+                                        <img src="images/chill-beach-image.jpg" width="90%" height="auto">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container fixed big-paper-boundary">
+            <div class="clearfix z1">
+                <div class="col-6 mx-auto big-paper bg-white relative">
+                    <div class="table big-paper-table">
+                        <div class="table-cell center">
+                            <img src="images/chill-beach-image.jpg" width="90%" height="auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        $(document).ready(function() {
+            // Key elements
+            var smallPaperBoundary = $(".small-paper-boundary");
+            var smallPaper = $(".small-paper");
+            var bigPaper = $(".big-paper");
+
+            // Key element measurements
+            var bodyHeight = $("body").height();
+            var smallPaperHeight = smallPaper.height();
+            var smallPaperBoundaryWidth = smallPaperBoundary.width();
+            var bigPaperWidth = bigPaper.width();
+            
+            // Set paper measurements
+            smallPaperBoundary.height(smallPaperBoundaryWidth*1.29);
+            bigPaper.height(bigPaperWidth*1.29);
+
+            // Set key element initial positions
+            smallPaper.css("top", (0-smallPaperHeight));
+            bigPaper.css("top", (0+bodyHeight));
+
+            // Reset variables on resize
+            $(window).resize(function(){
+                var bodyHeight = $("body").height();
+                var smallPaperHeight = smallPaper.height();
+                var smallPaperBoundaryWidth = smallPaperBoundary.width();
+                var bigPaperWidth = bigPaper.width();
+                
+                // Set paper measurements
+                smallPaperBoundary.height(smallPaperBoundaryWidth*1.29);
+                bigPaper.height(bigPaperWidth*1.29);
+                
+                // Set key element initial positions
+                smallPaper.css("top", (0-smallPaperHeight));
+                bigPaper.css("top", (0+bodyHeight));
+            });
+
+            // Animation one
+            smallPaper.animate({
+                top: "0" 
+            }, 1000, function() {
+                
+                //Animation two
+                smallPaperBoundary.animate({
+                    top: [bodyHeight, "swing"]
+                }, 1000, function() {
+
+                    //Animation three
+                    bigPaper.animate({
+                        top: ["4rem", "swing"]
+                    }, 1000, function() {
+                        bigPaper.delay(2000).fadeTo("slow", 0.0);
+                        console.log("This is beauty.");
+                    });
+                });
+            });
+        });
+    </script>
+</html>
