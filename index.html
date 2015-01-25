@@ -95,25 +95,65 @@
                 bigPaper.css("top", (0+bodyHeight));
             });
 
-            // Animation one
-            smallPaper.delay(2000).animate({
-                top: "0" 
-            }, 1000, function() {
-                
-                //Animation two
-                smallPaperBoundary.animate({
-                    top: [bodyHeight, "swing"]
+            // Print a new image on paper
+            function printImage() {
+                // Animation one
+                smallPaper.delay(2000).animate({
+                    top: "0"
                 }, 1000, function() {
 
-                    //Animation three
-                    bigPaper.animate({
-                        top: ["4rem", "swing"]
+                    //Animation two
+                    smallPaperBoundary.animate({
+                        top: [bodyHeight, "swing"]
                     }, 1000, function() {
-                        bigPaper.delay(2000).fadeTo("slow", 0.0);
-                        console.log("This is beauty.");
+
+                        //Animation three
+                        bigPaper.animate({
+                            top: ["4rem", "swing"]
+                        }, 1000, function() {
+                            bigPaper.delay(2000).fadeTo("slow", 0.0, function() {
+                                bigPaper.css("top", (0+bodyHeight));
+                                bigPaper.fadeTo("fast", 1.0);
+                                smallPaper.css("top",(0-smallPaperHeight));
+                                smallPaperBoundary.css("top", "3px");
+                                findImage();
+                            });
+                            console.log("This is beauty.");
+                            console.log("finding new image.");
+                        });
                     });
                 });
-            });
+            };
+
+            // Simple AJAX search that grabs 8 images from Google's deprecated image search
+            // For more info: https://developers.google.com/image-search/v1/jsondevguide
+            function findImage() {
+                $.ajax({
+                    dataType: "jsonp",
+                    url: 'http://ajax.googleapis.com/ajax/services/search/images',
+                    data: {
+                        v: "1.0",
+                        rsz: 8,
+                        q: "beauty",
+                        start: "0"
+                    },
+                    success: function ( json ) {
+                        var randomNum = Math.floor(Math.random() * json.responseData.results.length),
+                        results = json.responseData.results;
+
+                        console.log(results);
+                        $('img').attr('src', results[randomNum].tbUrl);
+
+                        // Add code here to restart the printer now that you have a new image on the paper
+                        console.log("printing image.");
+                        printImage();
+                    }
+                });
+            };
+
+            findImage();
         });
+
+
     </script>
 </html>
