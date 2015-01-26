@@ -32,7 +32,7 @@
                             <div class="small-paper bg-white relative">
                                 <div class="table small-paper-table">
                                     <div class="table-cell center">
-                                        <img src="images/chill-beach-image.jpg" width="90%" height="auto">
+                                        <img src="" width="90%" height="auto">
                                     </div>
                                 </div>
                             </div>
@@ -55,10 +55,16 @@
     </body>
     <script>
         $(document).ready(function() {
+            // Key vars
+            var imageLinks = [];
+            var counter = 0;
+            var printSwitch = true;
+
             // Key elements
             var smallPaperBoundary = $(".small-paper-boundary");
             var smallPaper = $(".small-paper");
             var bigPaper = $(".big-paper");
+            var keyImage = $("img");
 
             // Key element measurements
             var bodyHeight = $("body").height();
@@ -116,13 +122,31 @@
                                 bigPaper.fadeTo("fast", 1.0);
                                 smallPaper.css("top",(0-smallPaperHeight));
                                 smallPaperBoundary.css("top", "3px");
-                                findImage();
+                                counter ++;
+                                printSwitch = true;
+                                printImages();
                             });
                             console.log("This is beauty.");
-                            console.log("finding new image.");
                         });
                     });
                 });
+            };
+
+            // Check those image links to make sure they're nice
+            function myCallback(url, thumbUrl, answer) {
+                if(answer == true) {
+                    imageLinks.push(url);
+                } else {
+                    imageLinks.push(thumbUrl);
+                };
+                printImages();
+            };
+
+            function IsValidImageUrl(url, thumbUrl, callback) {
+                var img = new Image();
+                img.onerror = function() { callback(url, thumbUrl, false); }
+                img.onload =  function() { callback(url, thumbUrl, true); }
+                img.src = url
             };
 
             // Simple AJAX search that grabs 8 images from Google's deprecated image search
@@ -139,21 +163,35 @@
                     },
                     success: function ( json ) {
                         var randomNum = Math.floor(Math.random() * json.responseData.results.length),
-                        results = json.responseData.results;
+                        resultsData = json.responseData.results;
 
-                        console.log(results);
-                        $('img').attr('src', results[randomNum].tbUrl);
+                        // Set initial image before rotating through the others.
+                        //keyImage.attr('src', resultsData[randomNum].tbUrl);
 
-                        // Add code here to restart the printer now that you have a new image on the paper
-                        console.log("printing image.");
-                        printImage();
+                        $(resultsData).each(function(index, image) {
+                            IsValidImageUrl(image.url, image.tbUrl, myCallback);
+                        });
                     }
                 });
             };
 
+            // This only needs to fire once the asyncronous image validation is done
+            function printImages() {
+                var limit = imageLinks.length;
+
+                if(counter >= limit) {
+                    counter = limit;
+                };
+
+                if(printSwitch == true) {
+                    printSwitch = false;
+                    keyImage.attr('src', imageLinks[counter]);
+                    printImage();
+                };
+            };
+
             findImage();
         });
-
 
     </script>
 </html>
