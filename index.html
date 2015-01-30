@@ -29,7 +29,7 @@
                     <div class="bg-green absolute printer-dot printer-dot--blink"></div>
                     <div class="sm-col-7 md-col-8 bg-mid-gray mx-auto relative printer-slot">
                         <div class="absolute small-paper-boundary">
-                            <div class="small-paper bg-white relative">
+                            <div class="small-paper bg-white relative overflow-hidden">
                                 <div class="table small-paper-table">
                                     <div class="table-cell center">
                                         <img src="" width="90%" height="auto">
@@ -43,7 +43,7 @@
         </div>
         <div class="container fixed big-paper-boundary">
             <div class="clearfix z1">
-                <div class="col-6 mx-auto big-paper bg-white relative">
+                <div class="col-6 mx-auto big-paper bg-white relative overflow-hidden">
                     <div class="table big-paper-table">
                         <div class="table-cell center">
                             <img src="images/chill-beach-image.jpg" width="90%" height="auto">
@@ -59,6 +59,7 @@
             var imageLinks = [];
             var counter = 0;
             var printSwitch = true;
+            var pageNum = 0;
 
             // Key elements
             var smallPaperBoundary = $(".small-paper-boundary");
@@ -139,6 +140,7 @@
                 } else {
                     imageLinks.push(thumbUrl);
                 };
+                console.clear();
                 printImages();
             };
 
@@ -159,14 +161,11 @@
                         v: "1.0",
                         rsz: 8,
                         q: "beauty",
-                        start: "0"
+                        start: pageNum
                     },
                     success: function ( json ) {
                         var randomNum = Math.floor(Math.random() * json.responseData.results.length),
                         resultsData = json.responseData.results;
-
-                        // Set initial image before rotating through the others.
-                        //keyImage.attr('src', resultsData[randomNum].tbUrl);
 
                         $(resultsData).each(function(index, image) {
                             IsValidImageUrl(image.url, image.tbUrl, myCallback);
@@ -180,7 +179,8 @@
                 var limit = imageLinks.length;
 
                 if(counter >= limit) {
-                    counter = limit;
+                    pageNum = pageNum + 4;
+                    findImage();
                 };
 
                 if(printSwitch == true) {

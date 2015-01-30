@@ -88,12 +88,25 @@ html, body {
     box-shadow: 0px 1px 5px #ddd;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 768px) {
     .wall-text {
         font-size: 4rem;
+        margin: initial;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .wall-text {
+        margin: 10% 0 5%;
     }
 
     .printer {
         width: 30%;
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .wall-text {
+        margin: 30% 0 20%;
     }
 }
