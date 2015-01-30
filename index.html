@@ -80,8 +80,8 @@
             var smallPaperHeight = smallPaper.height();
 
             // Set key element initial positions
-            smallPaper.css("top", (0-smallPaperHeight));
-            bigPaper.css("top", (0+bodyHeight));
+            smallPaper.css("top", (0-smallPaperHeight-2));
+            bigPaper.css("top", (0+bodyHeight+20));
 
             // Reset variables on resize
             $(window).resize(function(){
@@ -98,7 +98,7 @@
                 var smallPaperHeight = smallPaper.height();
 
                 // Set key element initial positions
-                smallPaper.css("top", (0-smallPaperHeight));
+                smallPaper.css("top", (0-smallPaperHeight-2));
                 bigPaper.css("top", (0+bodyHeight));
             });
 
@@ -116,12 +116,12 @@
 
                         //Animation three
                         bigPaper.animate({
-                            top: ["4rem", "swing"]
+                            top: ["3rem", "swing"]
                         }, 1000, function() {
                             bigPaper.delay(2000).fadeTo("slow", 0.0, function() {
-                                bigPaper.css("top", (0+bodyHeight));
+                                bigPaper.css("top", (0+bodyHeight+20));
                                 bigPaper.fadeTo("fast", 1.0);
-                                smallPaper.css("top",(0-smallPaperHeight));
+                                smallPaper.css("top",(0-smallPaperHeight-2));
                                 smallPaperBoundary.css("top", "3px");
                                 counter ++;
                                 printSwitch = true;
