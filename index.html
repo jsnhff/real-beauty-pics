@@ -178,6 +178,8 @@
             function printImages() {
                 var limit = imageLinks.length;
 
+                if(pageNum >= 60) { pageNum = 0 };
+
                 if(counter >= limit) {
                     pageNum = pageNum + 4;
                     findImage();
