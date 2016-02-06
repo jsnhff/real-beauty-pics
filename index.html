@@ -15,7 +15,9 @@
         <link rel="stylesheet" href="css/basscss.min.css">
         <link rel="stylesheet" href="css/main.css">
 
-        <script src="js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery.base64.min.js"></script>
+        <script type="text/javascript" src="js/jquery.bingsearch.js"></script>
     </head>
     <body>
         <div class="bg-white">
@@ -55,13 +57,14 @@
     </body>
     <script>
         $(document).ready(function() {
-            // Key vars
+            // Key data vars
             var imageLinks = [];
             var counter = 0;
             var printSwitch = true;
-            var pageNum = 0;
+            var pageNum = 1;
+            var maxPages = 50;
 
-            // Key elements
+            // Key display elements
             var smallPaperBoundary = $(".small-paper-boundary");
             var smallPaper = $(".small-paper");
             var bigPaper = $(".big-paper");
@@ -125,7 +128,7 @@
                                 smallPaperBoundary.css("top", "3px");
                                 counter ++;
                                 printSwitch = true;
-                                printImages();
+                                loadImages();
                             });
                             console.log("This is beauty.");
                         });
@@ -133,56 +136,15 @@
                 });
             };
 
-            // Check those image links to make sure they're nice
-            function myCallback(url, thumbUrl, answer) {
-                if(answer == true) {
-                    imageLinks.push(url);
-                } else {
-                    imageLinks.push(thumbUrl);
-                };
-                console.clear();
-                printImages();
-            };
-
-            function IsValidImageUrl(url, thumbUrl, callback) {
-                var img = new Image();
-                img.onerror = function() { callback(url, thumbUrl, false); }
-                img.onload =  function() { callback(url, thumbUrl, true); }
-                img.src = url
-            };
-
-            // Simple AJAX search that grabs 8 images from Google's deprecated image search
-            // For more info: https://developers.google.com/image-search/v1/jsondevguide
-            function findImage() {
-                $.ajax({
-                    dataType: "jsonp",
-                    url: 'http://ajax.googleapis.com/ajax/services/search/images',
-                    data: {
-                        v: "1.0",
-                        rsz: 8,
-                        q: "beauty",
-                        start: pageNum
-                    },
-                    success: function ( json ) {
-                        var randomNum = Math.floor(Math.random() * json.responseData.results.length),
-                        resultsData = json.responseData.results;
-
-                        $(resultsData).each(function(index, image) {
-                            IsValidImageUrl(image.url, image.tbUrl, myCallback);
-                        });
-                    }
-                });
-            };
-
             // This only needs to fire once the asyncronous image validation is done
-            function printImages() {
-                var limit = imageLinks.length;
+            function loadImages() {
+                var limit = (imageLinks.length-1);
 
-                if(pageNum >= 60) { pageNum = 0 };
+                if(pageNum >= maxPages) { pageNum = 1 };
 
                 if(counter >= limit) {
-                    pageNum = pageNum + 4;
-                    findImage();
+                    pageNum = pageNum + 1;
+                    imageSearch();
                 };
 
                 if(printSwitch == true) {
@@ -192,7 +154,66 @@
                 };
             };
 
-            findImage();
+            // Check those image links to make sure they're nice
+            function IsValidImageUrl(url, thumbUrl, callback) {
+                var img = new Image();
+                img.onerror = function() { callback(url, thumbUrl, false); }
+                img.onload =  function() { callback(url, thumbUrl, true); }
+                img.src = url
+            };
+
+            // Push the valid URLs to the imageLinks array 
+            function myCallback(url, thumbUrl, answer) {
+                if(answer == true) {
+                    imageLinks.push(url);
+                    } else {
+                    imageLinks.push(thumbUrl);
+                };
+                console.clear();
+            };
+            
+            // Search for images using bing! Bye Google Image Search.
+            function imageSearch() {
+                $.bingSearch({
+                    // Required: query text
+                    query: 'beauty',
+                    // Required (unless you use urlBase) by Bing Search API
+                    appKey: 'cr6NAExU132u22cx3jsy4mxj59AqgK7qFReZVE0m1mU',
+                    // Optional (defaults to the Bing Search API Web Results Query).
+                    // Additional information: This feature allows you to proxy through a server-side
+                    //                         script in order to hide your API key, which is exposed to the
+                    //                         world if you set it client-side in appKey. An example PHP
+                    //                         script is included (searchproxy.php).
+                    //urlBase: 'searchproxy.php',
+                    // Optional (defaults to 1): Page Number
+                    pageNumber: pageNum,
+                    // Optional (defaults to 10): Page Size
+                    pageSize: maxPages,
+                    // Optional (defaults to false): Print console logging information about search results
+                    //debug: true,
+                    // Optional: Function is called after search results are retrieved, but before the interator is called
+                    beforeSearchResults: function(data) {
+                        // Use data.hasMore, data.resultBatchCount
+                    },
+                    // Optional: Function is called once per result in the current batch
+                    searchResultIterator: function(data) {
+                        // Use data.ID, data.Title, data.Description, data.Url, data.DisplayUrl, data.Metadata.Type (check for undefined)
+                        IsValidImageUrl(data.MediaUrl, data.Thumbnail.MediaUrl, myCallback);
+                    },
+                    // Optional: Function is called after search results are retrieved and after all instances of the interator are called
+                    afterSearchResults: function(data) {
+                        // Use data.hasMore, data.resultBatchCount
+                        loadImages();
+                    },
+                    // Optional: Called when there is an error retrieving results
+                    fail: function(data) {
+                        // data contains an error message
+                    }
+                });
+            }
+            
+            // Run the initial image search
+            imageSearch();
         });
 
     </script>
