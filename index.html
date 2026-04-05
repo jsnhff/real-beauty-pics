@@ -147,8 +147,12 @@
 
                 if(printSwitch == true) {
                     printSwitch = false;
-                    keyImage.attr('src', imageLinks[counter]);
-                    printImage();
+                    var preloader = new Image();
+                    preloader.onload = function() {
+                        keyImage.attr('src', imageLinks[counter]);
+                        printImage();
+                    };
+                    preloader.src = imageLinks[counter];
                 };
             };
 
