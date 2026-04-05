@@ -152,13 +152,19 @@
                 };
             };
 
-            // Fill imageLinks with seeded Picsum photos for the current page
+            // Search for beauty images using Pexels
             function imageSearch() {
-                var baseSeed = (pageNum - 1) * maxPages;
-                for (var i = 0; i < maxPages; i++) {
-                    imageLinks.push('https://picsum.photos/seed/' + (baseSeed + i) + '/800/600');
-                }
-                loadImages();
+                $.ajax({
+                    url: 'https://api.pexels.com/v1/search',
+                    headers: { 'Authorization': 'S12tw56n10rRLYjs0u1bjLNfGnUuxTP8MUcCPweRF7Xr6UOpRkEQd9g5' },
+                    data: { query: 'beauty', per_page: maxPages, page: pageNum },
+                    success: function(data) {
+                        for (var i = 0; i < data.photos.length; i++) {
+                            imageLinks.push(data.photos[i].src.large);
+                        }
+                        loadImages();
+                    }
+                });
             }
             
             // Run the initial image search
